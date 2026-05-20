@@ -1,8 +1,37 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import Dashboard from "./pages/Dashboard";
+import "./App.css"
+
+import Login from "./pages/login"
+import Signup from "./pages/signup"
+import Dashboard from "./pages/dashboard"
+import Assignments from "./pages/Assignments"
+import Profile from "./pages/Profile"
+
+import Sidebar from "./components/Sidebar"
+import Navbar from "./components/Navbar"
+
+function Layout({ children }) {
+
+return (
+
+<div className="app-container">
+
+<Sidebar/>
+
+<div className="main-content">
+
+<Navbar/>
+
+{children}
+
+</div>
+
+</div>
+
+)
+
+}
 
 function App() {
 
@@ -12,11 +41,36 @@ return (
 
 <Routes>
 
-<Route path="/" element={<Login/>}/>
+<Route path="/" element={<Login />} />
 
-<Route path="/signup" element={<Signup/>}/>
+<Route path="/signup" element={<Signup />} />
 
-<Route path="/dashboard" element={<Dashboard/>}/>
+<Route
+path="/dashboard"
+element={
+<Layout>
+<Dashboard/>
+</Layout>
+}
+/>
+
+<Route
+path="/assignments"
+element={
+<Layout>
+<Assignments/>
+</Layout>
+}
+/>
+
+<Route
+path="/profile"
+element={
+<Layout>
+<Profile/>
+</Layout>
+}
+/>
 
 </Routes>
 
@@ -26,4 +80,4 @@ return (
 
 }
 
-export default App;
+export default App
