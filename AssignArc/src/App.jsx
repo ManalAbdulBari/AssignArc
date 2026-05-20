@@ -1,15 +1,24 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import "./App.css"
+import "./App.css";
 
-import Login from "./pages/login"
-import Signup from "./pages/signup"
-import Dashboard from "./pages/dashboard"
-import Assignments from "./pages/Assignments"
-import Profile from "./pages/Profile"
+import Login from "./pages/login";
+import Signup from "./pages/signup";
 
-import Sidebar from "./components/Sidebar"
-import Navbar from "./components/Navbar"
+import Dashboard from "./pages/dashboard";
+import Assignments from "./pages/Assignments";
+import Profile from "./pages/Profile";
+
+import StudentDashboard from "./pages/StudentDashboard";
+import TeacherDashboard from "./pages/TeacherDashboard";
+import UploadAssignment from "./pages/UploadAssignment";
+import Submissions from "./pages/Submissions";
+
+import AssignmentDetail from "./pages/AssignmentDetail";
+import NotFound from "./pages/NotFound";
+
+import Sidebar from "./components/Sidebar";
+import Navbar from "./components/Navbar";
 
 function Layout({ children }) {
 
@@ -17,11 +26,11 @@ return (
 
 <div className="app-container">
 
-<Sidebar/>
+<Sidebar />
 
 <div className="main-content">
 
-<Navbar/>
+<Navbar />
 
 {children}
 
@@ -29,7 +38,7 @@ return (
 
 </div>
 
-)
+);
 
 }
 
@@ -41,15 +50,25 @@ return (
 
 <Routes>
 
-<Route path="/" element={<Login />} />
+{/* Authentication */}
 
-<Route path="/signup" element={<Signup />} />
+<Route
+path="/"
+element={<Login />}
+/>
+
+<Route
+path="/signup"
+element={<Signup />}
+/>
+
+{/* Main Dashboard */}
 
 <Route
 path="/dashboard"
 element={
 <Layout>
-<Dashboard/>
+<Dashboard />
 </Layout>
 }
 />
@@ -58,7 +77,16 @@ element={
 path="/assignments"
 element={
 <Layout>
-<Assignments/>
+<Assignments />
+</Layout>
+}
+/>
+
+<Route
+path="/assignment/:id"
+element={
+<Layout>
+<AssignmentDetail />
 </Layout>
 }
 />
@@ -67,17 +95,68 @@ element={
 path="/profile"
 element={
 <Layout>
-<Profile/>
+<Profile />
 </Layout>
 }
+/>
+
+{/* Student */}
+
+<Route
+path="/student"
+element={
+<Layout>
+<StudentDashboard />
+</Layout>
+}
+/>
+
+{/* Teacher */}
+
+<Route
+path="/teacher"
+element={
+<Layout>
+<TeacherDashboard />
+</Layout>
+}
+/>
+
+{/* Upload */}
+
+<Route
+path="/upload"
+element={
+<Layout>
+<UploadAssignment />
+</Layout>
+}
+/>
+
+{/* Submissions */}
+
+<Route
+path="/submissions"
+element={
+<Layout>
+<Submissions />
+</Layout>
+}
+/>
+
+{/* 404 */}
+
+<Route
+path="*"
+element={<NotFound />}
 />
 
 </Routes>
 
 </BrowserRouter>
 
-)
+);
 
 }
 
-export default App
+export default App;
