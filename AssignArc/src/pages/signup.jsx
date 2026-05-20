@@ -1,23 +1,34 @@
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase/firebase";
+import { signupUser } from "../services/authService";
 
-function Signup() {
+function Signup(){
 
 const [email,setEmail]=useState("")
 const [password,setPassword]=useState("")
+const [loading,setLoading]=useState(false)
 
 const signup=async()=>{
 
+if(!email||!password){
+
+alert("Fill all fields")
+return
+
+}
+
 try{
 
-await createUserWithEmailAndPassword(
-auth,
+setLoading(true)
+
+await signupUser(
 email,
 password
 )
 
 alert("Account Created Successfully")
+
+setEmail("")
+setPassword("")
 
 }
 
@@ -27,13 +38,27 @@ alert(error.message)
 
 }
 
+finally{
+
+setLoading(false)
+
+}
+
 }
 
 return(
 
-<div>
+<div className="auth-container">
 
-<h1>AssignArc Signup</h1>
+<div className="auth-box">
+
+<h1>
+Create Account
+</h1>
+
+<p>
+Create your AssignArc account
+</p>
 
 <input
 type="email"
@@ -49,9 +74,16 @@ value={password}
 onChange={(e)=>setPassword(e.target.value)}
 />
 
-<button onClick={signup}>
-Signup
+<button
+className="primary-btn"
+onClick={signup}
+>
+
+{loading?"Creating...":"Signup"}
+
 </button>
+
+</div>
 
 </div>
 

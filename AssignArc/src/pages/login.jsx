@@ -1,23 +1,84 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../services/authService";
 
-function Login(){
+function Login() {
 
-return(
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+const [loading, setLoading] = useState(false);
 
-<div>
+const navigate = useNavigate();
 
-<h1>AssignArc Login</h1>
+const handleLogin = async () => {
 
-<input placeholder="Email"/>
+if (!email || !password) {
+
+alert("Please fill all fields.");
+return;
+
+}
+
+try {
+
+setLoading(true);
+
+await loginUser(email, password);
+
+alert("Login Successful.");
+
+navigate("/dashboard");
+
+}
+
+catch (error) {
+
+alert(error.message);
+
+}
+
+finally {
+
+setLoading(false);
+
+}
+
+};
+
+return (
+
+<div className="auth-container">
+
+<div className="auth-box">
+
+<h1>
+AssignArc Login
+</h1>
+
+<p>
+Welcome back
+</p>
 
 <input
-placeholder="Password"
-type="password"
+type="email"
+placeholder="Email"
+value={email}
+onChange={(e) => setEmail(e.target.value)}
 />
 
-<button>
+<input
+type="password"
+placeholder="Password"
+value={password}
+onChange={(e) => setPassword(e.target.value)}
+/>
 
-Login
+<button
+className="primary-btn"
+onClick={handleLogin}
+>
+
+{loading ? "Logging In..." : "Login"}
 
 </button>
 
@@ -35,7 +96,9 @@ Signup
 
 </div>
 
-)
+</div>
+
+);
 
 }
 
