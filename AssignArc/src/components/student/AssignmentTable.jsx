@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
 
-function AssignmentTable({ assignments }) {
+function AssignmentTable({
 
-return (
+assignments=[]
+
+}){
+
+return(
 
 <div className="card">
 
@@ -50,9 +54,9 @@ Action
 
 {
 
-assignments.length===0?
+assignments.length===0
 
-(
+?
 
 <tr>
 
@@ -67,11 +71,7 @@ No Assignments Found
 
 </tr>
 
-)
-
 :
-
-(
 
 assignments.map(
 
@@ -89,13 +89,25 @@ key={item.id}
 
 <td>
 
-{item.course}
+{
+
+item.course||
+
+"General"
+
+}
 
 </td>
 
 <td>
 
-{item.deadline}
+{
+
+item.deadline||
+
+"No Deadline"
+
+}
 
 </td>
 
@@ -105,13 +117,31 @@ key={item.id}
 
 className={
 
-`status ${item.status.toLowerCase()}`
+`status ${
+
+item.status
+
+?.toLowerCase()
+
+||
+
+"active"
+
+}`
 
 }
 
 >
 
-{item.status}
+{
+
+item.status
+
+||
+
+"Active"
+
+}
 
 </span>
 
@@ -125,7 +155,7 @@ className="action-buttons"
 
 <Link
 
-to={`/assignment/${item.id}`}
+to="/upload"
 
 >
 
@@ -133,7 +163,7 @@ to={`/assignment/${item.id}`}
 className="view-btn"
 >
 
-View
+Upload
 
 </button>
 
@@ -144,8 +174,6 @@ View
 </td>
 
 </tr>
-
-)
 
 )
 

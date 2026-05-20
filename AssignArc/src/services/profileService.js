@@ -1,30 +1,86 @@
 import {
 
 doc,
-
-setDoc,
-
 getDoc,
+setDoc,
+serverTimestamp
 
-updateDoc
+}
 
-} from "firebase/firestore";
+from "firebase/firestore";
 
 import {
 
 db
 
-} from "../firebase/firebase";
+}
 
-export const createProfile = async (
+from "../firebase/firebase";
+
+export const getProfile=
+
+async(uid)=>{
+
+try{
+
+const snapshot=
+
+await getDoc(
+
+doc(
+
+db,
+
+"users",
+
+uid
+
+)
+
+);
+
+if(
+
+snapshot.exists()
+
+){
+
+return{
+
+id:
+
+snapshot.id,
+
+...snapshot.data()
+
+};
+
+}
+
+return null;
+
+}
+
+catch(error){
+
+console.log(error);
+
+throw error;
+
+}
+
+};
+
+export const updateProfile=
+
+async(
 
 uid,
-
 data
 
-) => {
+)=>{
 
-try {
+try{
 
 await setDoc(
 
@@ -38,97 +94,29 @@ uid
 
 ),
 
-data
+{
+
+...data,
+
+updatedAt:
+
+serverTimestamp()
+
+},
+
+{
+
+merge:true
+
+}
 
 );
 
 }
 
-catch (error) {
+catch(error){
 
-throw error;
-
-}
-
-};
-
-export const getProfile = async (
-
-uid
-
-) => {
-
-try {
-
-const profileRef = doc(
-
-db,
-
-"users",
-
-uid
-
-);
-
-const profile = await getDoc(
-
-profileRef
-
-);
-
-if (
-
-profile.exists()
-
-) {
-
-return profile.data();
-
-}
-
-return null;
-
-}
-
-catch (error) {
-
-throw error;
-
-}
-
-};
-
-export const updateProfile = async (
-
-uid,
-
-data
-
-) => {
-
-try {
-
-const profileRef = doc(
-
-db,
-
-"users",
-
-uid
-
-);
-
-await updateDoc(
-
-profileRef,
-
-data
-
-);
-
-}
-
-catch (error) {
+console.log(error);
 
 throw error;
 

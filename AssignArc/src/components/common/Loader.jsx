@@ -11,12 +11,14 @@ className="loader-container"
 >
 
 <div
-className="loader-circle"
+className="loader-spinner"
 >
 
 </div>
 
-<p>
+<p
+className="loader-text"
+>
 
 {text}
 
