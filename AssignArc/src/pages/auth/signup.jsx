@@ -1,106 +1,94 @@
 import {
-
 useState,
 useEffect
-
 }
-
 from "react";
 
 import {
-
 useNavigate,
 Link
-
 }
-
 from "react-router-dom";
 
 import {
-
 signupUser
-
 }
-
 from "../../services/authService";
 
 import useAuth
-
 from "../../hooks/useAuth";
 
 import Loader
-
 from "../../components/common/Loader";
 
 function Signup(){
 
 const [email,setEmail]=
-
 useState("");
 
 const [password,setPassword]=
-
 useState("");
 
 const [confirmPassword,setConfirmPassword]=
-
 useState("");
 
 const [role,setRole]=
-
 useState("student");
 
 const [loading,setLoading]=
-
 useState(false);
 
 const navigate=
-
 useNavigate();
 
 const {
-
-user
-
-}=useAuth();
+user,
+role:userRole
+}
+=
+useAuth();
 
 useEffect(()=>{
 
-if(
+if(!user)return;
 
-user
+if(userRole==="admin"){
 
+navigate("/admin");
+
+}
+
+else if(
+userRole==="teacher"
 ){
+
+navigate("/teacher");
+
+}
+
+else{
 
 navigate("/student");
 
 }
 
 },[
-
 user,
+userRole,
 navigate
-
 ]);
 
 const signup=
-
 async()=>{
 
 if(
-
 !email||
-
 !password||
-
 !confirmPassword
-
 ){
 
 alert(
-
 "Fill all fields"
-
 );
 
 return;
@@ -108,15 +96,11 @@ return;
 }
 
 if(
-
 password.length<6
-
 ){
 
 alert(
-
 "Password minimum 6 characters"
-
 );
 
 return;
@@ -124,15 +108,11 @@ return;
 }
 
 if(
-
 password!==confirmPassword
-
 ){
 
 alert(
-
 "Passwords do not match"
-
 );
 
 return;
@@ -152,9 +132,7 @@ role
 );
 
 alert(
-
 "Account Created Successfully"
-
 );
 
 navigate("/");
@@ -164,17 +142,12 @@ navigate("/");
 catch(error){
 
 if(
-
 error.code===
-
 "auth/email-already-in-use"
-
 ){
 
 alert(
-
 "Email already exists"
-
 );
 
 }
@@ -182,9 +155,7 @@ alert(
 else{
 
 alert(
-
 error.message
-
 );
 
 }
@@ -200,17 +171,13 @@ setLoading(false);
 };
 
 if(
-
 loading
-
 ){
 
 return(
 
 <Loader
-
 text="Creating Account..."
-
 />
 
 );
@@ -246,9 +213,7 @@ value={email}
 onChange={(e)=>{
 
 setEmail(
-
 e.target.value
-
 );
 
 }}
@@ -266,9 +231,7 @@ value={password}
 onChange={(e)=>{
 
 setPassword(
-
 e.target.value
-
 );
 
 }}
@@ -286,9 +249,7 @@ value={confirmPassword}
 onChange={(e)=>{
 
 setConfirmPassword(
-
 e.target.value
-
 );
 
 }}
@@ -302,9 +263,7 @@ value={role}
 onChange={(e)=>{
 
 setRole(
-
 e.target.value
-
 );
 
 }}
@@ -320,6 +279,12 @@ Student
 <option value="teacher">
 
 Teacher
+
+</option>
+
+<option value="admin">
+
+Admin
 
 </option>
 

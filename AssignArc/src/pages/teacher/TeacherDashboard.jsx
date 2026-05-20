@@ -1,166 +1,64 @@
 import {
-
 useEffect,
 useState
-
 }
-
 from "react";
 
 import {
-
-collection,
-getDocs
-
-}
-
-from "firebase/firestore";
-
-import {
-
 Link,
 useNavigate
-
 }
-
 from "react-router-dom";
 
 import {
-
-db
-
+auth
 }
-
 from "../../firebase/firebase";
 
-import AnalyticsCard
-
-from "../../components/teacher/AnalyticsCard";
-
 import Loader
-
 from "../../components/common/Loader";
 
 import Navbar
-
 from "../../components/common/Navbar";
 
 function TeacherDashboard(){
 
 const navigate=
-
 useNavigate();
 
-const [assignments,setAssignments]=
-
-useState(0);
-
-const [submissions,setSubmissions]=
-
-useState(0);
-
-const [pending,setPending]=
-
-useState(0);
-
 const [loading,setLoading]=
-
 useState(true);
 
 useEffect(()=>{
 
-loadDashboard();
-
-},[]);
-
-const loadDashboard=
-
-async()=>{
-
-try{
-
-const assignmentData=
-
-await getDocs(
-
-collection(
-db,
-"assignments"
-)
-
-);
-
-const submissionData=
-
-await getDocs(
-
-collection(
-db,
-"submissions"
-)
-
-);
-
-const totalAssignments=
-
-assignmentData.size;
-
-const totalSubmissions=
-
-submissionData.size;
-
-setAssignments(
-
-totalAssignments
-
-);
-
-setSubmissions(
-
-totalSubmissions
-
-);
-
-setPending(
-
-Math.max(
-
-0,
-
-totalAssignments-totalSubmissions
-
-)
-
-);
-
-}
-
-catch(error){
-
-console.log(error);
-
-}
-
-finally{
+if(auth.currentUser){
 
 setLoading(false);
 
 }
 
+else{
+
+navigate("/");
+
+}
+
+},[]);
+
+const handleLogout=async()=>{
+
+await auth.signOut();
+
+navigate("/");
+
 };
 
-if(
-
-loading
-
-){
+if(loading){
 
 return(
 
 <Loader
-
 text="Loading Teacher Dashboard..."
-
 />
 
 );
@@ -181,9 +79,77 @@ navigate("/profile");
 
 }}
 
+onLogout={handleLogout}
+
 />
 
-<div className="main-content">
+<div className="dashboard-layout">
+
+<div className="sidebar">
+
+<h3>
+
+Teacher Menu
+
+</h3>
+
+<Link
+to="/teacher"
+className="sidebar-link"
+>
+
+Dashboard
+
+</Link>
+
+<Link
+to="/create"
+className="sidebar-link"
+>
+
+Create Assignment
+
+</Link>
+
+<Link
+to="/manage"
+className="sidebar-link"
+>
+
+Manage Assignments
+
+</Link>
+
+<Link
+to="/submissions"
+className="sidebar-link"
+>
+
+Student Work
+
+</Link>
+
+<Link
+to="/reports"
+className="sidebar-link"
+>
+
+Reports
+
+</Link>
+
+<Link
+to="/profile"
+className="sidebar-link"
+>
+
+Profile
+
+</Link>
+
+</div>
+
+<div className="dashboard-content">
 
 <h1
 className="page-title"
@@ -193,49 +159,19 @@ Teacher Dashboard
 
 </h1>
 
-<div
-className="dashboard-grid"
+<p
+className="welcome-text"
 >
 
-<AnalyticsCard
+Manage assignments and review student submissions.
 
-title="Assignments"
+</p>
 
-value={assignments}
-
-subtitle="Created Assignments"
-
-/>
-
-<AnalyticsCard
-
-title="Submissions"
-
-value={submissions}
-
-subtitle="Student Uploads"
-
-/>
-
-<AnalyticsCard
-
-title="Pending"
-
-value={pending}
-
-subtitle="Need Review"
-
-/>
-
-</div>
-
-<div
-className="dashboard-grid"
->
+<div className="dashboard-grid">
 
 <Link
 to="/create"
-className="card"
+className="card action-card"
 >
 
 <h3>
@@ -246,7 +182,7 @@ Create Assignment
 
 <p>
 
-Add new assignment
+Add new assignments
 
 </p>
 
@@ -254,7 +190,7 @@ Add new assignment
 
 <Link
 to="/manage"
-className="card"
+className="card action-card"
 >
 
 <h3>
@@ -265,7 +201,7 @@ Manage Assignments
 
 <p>
 
-Edit and delete assignments
+Update and organize tasks
 
 </p>
 
@@ -273,7 +209,7 @@ Edit and delete assignments
 
 <Link
 to="/submissions"
-className="card"
+className="card action-card"
 >
 
 <h3>
@@ -292,7 +228,7 @@ Review uploaded work
 
 <Link
 to="/reports"
-className="card"
+className="card action-card"
 >
 
 <h3>
@@ -303,11 +239,29 @@ Reports
 
 <p>
 
-View analytics
+Track student performance
 
 </p>
 
 </Link>
+
+</div>
+
+<div className="card">
+
+<h3>
+
+Teacher Activity
+
+</h3>
+
+<p>
+
+Monitor submissions and keep assignments updated.
+
+</p>
+
+</div>
 
 </div>
 

@@ -1,100 +1,70 @@
 import {
-
 useState,
 useEffect
-
-}
-
-from "react";
+} from "react";
 
 import {
-
 Link,
 useNavigate
-
-}
-
-from "react-router-dom";
+} from "react-router-dom";
 
 import {
-
 loginUser
+} from "../../services/authService";
 
-}
+import useAuth from "../../hooks/useAuth";
 
-from "../../services/authService";
-
-import useAuth
-
-from "../../hooks/useAuth";
-
-import Loader
-
-from "../../components/common/Loader";
+import Loader from "../../components/common/Loader";
 
 function Login(){
 
-const [email,setEmail]=
+const [email,setEmail]=useState("");
 
-useState("");
+const [password,setPassword]=useState("");
 
-const [password,setPassword]=
+const [loading,setLoading]=useState(false);
 
-useState("");
-
-const [loading,setLoading]=
-
-useState(false);
-
-const navigate=
-
-useNavigate();
+const navigate=useNavigate();
 
 const {
-
-user
-
+user,
+role
 }=useAuth();
 
 useEffect(()=>{
 
-if(
+if(!user)return;
 
-user
+if(role==="admin"){
 
-){
+navigate("/admin");
 
-navigate(
+}
 
-"/student"
+else if(role==="teacher"){
 
-);
+navigate("/teacher");
+
+}
+
+else if(role==="student"){
+
+navigate("/student");
 
 }
 
 },[
-
 user,
+role,
 navigate
-
 ]);
 
-const handleLogin=
+const handleLogin=async()=>{
 
-async()=>{
-
-if(
-
-!email||
-
-!password
-
-){
+if(!email||!password){
 
 alert(
-
 "Please fill all fields"
-
 );
 
 return;
@@ -106,41 +76,32 @@ try{
 setLoading(true);
 
 const result=
-
 await loginUser(
-
 email,
 password
-
 );
 
 alert(
-
 "Login Successful"
-
 );
 
-if(
+if(result.role==="admin"){
 
+navigate("/admin");
+
+}
+
+else if(
 result.role==="teacher"
-
 ){
 
-navigate(
-
-"/teacher"
-
-);
+navigate("/teacher");
 
 }
 
 else{
 
-navigate(
-
-"/student"
-
-);
+navigate("/student");
 
 }
 
@@ -149,17 +110,12 @@ navigate(
 catch(error){
 
 if(
-
 error.code===
-
 "auth/invalid-credential"
-
 ){
 
 alert(
-
 "Invalid email or password"
-
 );
 
 }
@@ -167,9 +123,7 @@ alert(
 else{
 
 alert(
-
 error.message
-
 );
 
 }
@@ -184,18 +138,12 @@ setLoading(false);
 
 };
 
-if(
-
-loading
-
-){
+if(loading){
 
 return(
 
 <Loader
-
 text="Logging In..."
-
 />
 
 );
@@ -231,9 +179,7 @@ value={email}
 onChange={(e)=>{
 
 setEmail(
-
 e.target.value
-
 );
 
 }}
@@ -251,9 +197,7 @@ value={password}
 onChange={(e)=>{
 
 setPassword(
-
 e.target.value
-
 );
 
 }}
@@ -261,9 +205,7 @@ e.target.value
 onKeyDown={(e)=>{
 
 if(
-
 e.key==="Enter"
-
 ){
 
 handleLogin();
@@ -272,7 +214,7 @@ handleLogin();
 
 }}
 
-/>
+ />
 
 <button
 

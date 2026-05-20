@@ -13,59 +13,41 @@ import {
 auth
 } from "../firebase/firebase";
 
-const AuthContext=
-
-createContext();
+export const AuthContext = createContext();
 
 export function AuthProvider({
-
 children
+}) {
 
-}){
+const [user, setUser] = useState(null);
 
-const [user,setUser]=
+const [loading, setLoading] = useState(true);
 
-useState(null);
+useEffect(() => {
 
-const [loading,setLoading]=
-
-useState(true);
-
-useEffect(()=>{
-
-const unsubscribe=
-
-onAuthStateChanged(
+const unsubscribe = onAuthStateChanged(
 
 auth,
 
-(currentUser)=>{
+(currentUser) => {
 
-setUser(
+setUser(currentUser);
 
-currentUser
-
-);
-
-setLoading(
-
-false
-
-);
+setLoading(false);
 
 }
 
 );
 
-return()=>{
+return () => {
 
 unsubscribe();
 
 };
 
-},[]);
+}, []);
 
-const value={
+const value = {
 
 user,
 
@@ -73,11 +55,9 @@ loading
 
 };
 
-return(
+return (
 
-<AuthContext.Provider
-value={value}
->
+<AuthContext.Provider value={value}>
 
 {children}
 
@@ -87,12 +67,8 @@ value={value}
 
 }
 
-export function useAuth(){
+export function useAuth() {
 
-return useContext(
-
-AuthContext
-
-);
+return useContext(AuthContext);
 
 }
